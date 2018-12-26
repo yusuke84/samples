@@ -18,16 +18,17 @@ const servers = document.querySelector('select#servers');
 let urlInput = document.querySelector('input#url');
 let usernameInput = document.querySelector('input#username');
 const iceCandidatePoolInput = document.querySelector('input#iceCandidatePool');
+const serversSelect = document.querySelector('select#servers');
 
-addButton.onclick = addServer;
+//addButton.onclick = addServer;
 gatherButton.onclick = start;
-removeButton.onclick = removeServer;
-resetButton.onclick = (e) => {
+//removeButton.onclick = removeServer;
+/*resetButton.onclick = (e) => {
   window.localStorage.clear();
   document.querySelectorAll('select#servers option').forEach(option => option.remove());
   const serversSelect = document.querySelector('select#servers');
   setDefaultServer(serversSelect);
-};
+};*/
 
 iceCandidatePoolInput.onchange = function(e) {
   const span = e.target.parentElement.querySelector('span');
@@ -41,6 +42,7 @@ const peer = new Peer({
 
 peer.on('open', () => {
   console.log(peer);
+  setDefaultServer(serversSelect);
   urlInput.value = peer._pcConfig.iceServers[1].urls;
   usernameInput.value = peer._pcConfig.iceServers[1].username;
   passwordInput.value = peer._pcConfig.iceServers[1].credential;
@@ -63,8 +65,8 @@ const allServersKey = 'servers';
 
 function setDefaultServer(serversSelect) {
   const o = document.createElement('option');
-  o.value = '{"urls":["stun:stun.l.google.com:19302"]}';
-  o.text = 'stun:stun.l.google.com:19302';
+  o.value = '{"urls":["stun:stun.webrtc.ecl.ntt.com:3478"]}';
+  o.text = 'stun:stun.webrtc.ecl.ntt.com:3478';
   serversSelect.add(o);
 }
 
@@ -133,7 +135,7 @@ function removeServer() {
       servers.remove(i);
     }
   }
- writeServersToLocalStorage();
+ //writeServersToLocalStorage();
 }
 
 function start() {
@@ -306,7 +308,7 @@ function gatheringStateChange() {
   candidateTBody.appendChild(row);
 }
 
-readServersFromLocalStorage();
+//readServersFromLocalStorage();
 
 // check if we have getUserMedia permissions.
 navigator.mediaDevices
