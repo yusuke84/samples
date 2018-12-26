@@ -11,12 +11,12 @@
 const addButton = document.querySelector('button#add');
 const candidateTBody = document.querySelector('tbody#candidatesBody');
 const gatherButton = document.querySelector('button#gather');
-const passwordInput = document.querySelector('input#password');
+let passwordInput = document.querySelector('input#password');
 const removeButton = document.querySelector('button#remove');
 const resetButton = document.querySelector('button#reset');
 const servers = document.querySelector('select#servers');
-const urlInput = document.querySelector('input#url');
-const usernameInput = document.querySelector('input#username');
+let urlInput = document.querySelector('input#url');
+let usernameInput = document.querySelector('input#username');
 const iceCandidatePoolInput = document.querySelector('input#iceCandidatePool');
 
 addButton.onclick = addServer;
@@ -33,6 +33,27 @@ iceCandidatePoolInput.onchange = function(e) {
   const span = e.target.parentElement.querySelector('span');
   span.textContent = e.target.value;
 };
+
+const peer = new Peer({
+  key:   '4e29d96b-f22c-4ebe-9e7e-2b36b82cfb65',
+  debug: 3,
+});
+
+peer.on('open', () => {
+  console.log(peer);
+  urlInput.value = peer._pcConfig.iceServers[1].urls;
+  usernameInput.value = peer._pcConfig.iceServers[1].username;
+  passwordInput.value = peer._pcConfig.iceServers[1].credential;
+  addServer();
+  urlInput.value = peer._pcConfig.iceServers[2].urls;
+  usernameInput.value = peer._pcConfig.iceServers[2].username;
+  passwordInput.value = peer._pcConfig.iceServers[2].credential;
+  addServer();
+  urlInput.value = peer._pcConfig.iceServers[3].urls;
+  usernameInput.value = peer._pcConfig.iceServers[3].username;
+  passwordInput.value = peer._pcConfig.iceServers[3].credential;
+  addServer();
+});
 
 let begin;
 let pc;
@@ -103,7 +124,7 @@ function addServer() {
   option.ondblclick = selectServer;
   servers.add(option);
   urlInput.value = usernameInput.value = passwordInput.value = '';
-  writeServersToLocalStorage();
+  //writeServersToLocalStorage();
 }
 
 function removeServer() {
@@ -112,7 +133,7 @@ function removeServer() {
       servers.remove(i);
     }
   }
-  writeServersToLocalStorage();
+ writeServersToLocalStorage();
 }
 
 function start() {
